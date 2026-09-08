@@ -2,15 +2,53 @@
   "use strict";
 
   const BUTTONS_ID = "chappy-quick-buttons";
-  const PROMPTS = [
-    { label: "OKです", text: "OKです" },
-    { label: "それで進めて", text: "それで進めて" },
-    { label: "調査して", text: "調査して" },
-    { label: "詳しく", text: "詳しく" },
-    { label: "続けて", text: "続けて" }
+  const DEFAULT_PROMPTS = [
+    { label: "OKです", text: "OKです", enabled: true },
+    { label: "それで進めて", text: "それで進めて", enabled: true },
+    { label: "調査して", text: "調査して", enabled: true },
+    { label: "詳しく", text: "詳しく", enabled: true },
+    { label: "続けて", text: "続けて", enabled: true }
   ];
+  let prompts = getUsablePrompts(DEFAULT_PROMPTS);
 
   let mountScheduled = false;
+
+  function getUsablePrompts(value) {
+    const source = Array.isArray(value) ? value : DEFAULT_PROMPTS;
+    return source
+      .filter((prompt) => (
+        prompt &&
+        prompt.enabled === true &&
+        typeof prompt.label === "string" &&
+        typeof prompt.text === "string" &&
+        prompt.label.trim() &&
+        prompt.text.trim()
+      ))
+      .map((prompt) => ({
+        label: prompt.label,
+        text: prompt.text
+      }));
+  }
+
+  function refreshPromptsFromStorage() {
+    try {
+      chrome.storage.sync.get("prompts", (result) => {
+        if (chrome.runtime.lastError) {
+          console.warn("[Chappy Quick] Could not load prompts from sync storage.");
+          prompts = getUsablePrompts(DEFAULT_PROMPTS);
+          refreshButtons();
+          return;
+        }
+
+        prompts = getUsablePrompts(result.prompts);
+        refreshButtons();
+      });
+    } catch (error) {
+      console.warn("[Chappy Quick] Could not access sync storage.", error);
+      prompts = getUsablePrompts(DEFAULT_PROMPTS);
+      refreshButtons();
+    }
+  }
 
   function isVisible(element) {
     if (!element || !element.isConnected) return false;
@@ -218,7 +256,7 @@
     container.id = BUTTONS_ID;
     container.className = "chappy-quick-buttons";
 
-    for (const prompt of PROMPTS) {
+    for (const prompt of prompts) {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "chappy-quick-button";
@@ -240,6 +278,11 @@
   }
 
   function mountButtons() {
+    if (!prompts.length) {
+      document.getElementById(BUTTONS_ID)?.remove();
+      return;
+    }
+
     const prompt = findPromptElement();
     if (!prompt) return;
 
@@ -264,6 +307,11 @@
     }
   }
 
+  function refreshButtons() {
+    document.getElementById(BUTTONS_ID)?.remove();
+    mountButtons();
+  }
+
   function scheduleMount() {
     if (mountScheduled) return;
 
@@ -275,6 +323,15 @@
   }
 
   mountButtons();
+
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== "sync" || !changes.prompts) return;
+
+    prompts = getUsablePrompts(changes.prompts.newValue);
+    refreshButtons();
+  });
+
+  refreshPromptsFromStorage();
 
   const observer = new MutationObserver(scheduleMount);
   observer.observe(document.documentElement, { childList: true, subtree: true });

@@ -1,0 +1,128 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: Canvas;
+  color: CanvasText;
+}
+
+.settings {
+  width: min(760px, calc(100% - 32px));
+  margin: 32px auto;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.description {
+  margin: 8px 0 24px;
+  color: GrayText;
+}
+
+.prompt-list {
+  display: grid;
+  gap: 12px;
+}
+
+.prompt-row {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 0.8fr) minmax(220px, 1.5fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid ButtonBorder;
+  border-radius: 8px;
+}
+
+.prompt-row label:not(.enabled-field) {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.enabled-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  border: 1px solid ButtonBorder;
+  border-radius: 4px;
+  padding: 7px;
+  background: Field;
+  color: FieldText;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  border: 1px solid ButtonBorder;
+  border-radius: 5px;
+  padding: 7px 12px;
+  background: ButtonFace;
+  color: ButtonText;
+  cursor: pointer;
+  font: inherit;
+}
+
+button:hover {
+  filter: brightness(0.95);
+}
+
+.secondary-button {
+  margin-top: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.primary-button {
+  font-weight: 600;
+}
+
+.delete-button {
+  color: #b42318;
+}
+
+.status {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  color: GrayText;
+}
+
+.status.error {
+  color: #b42318;
+}
+
+@media (max-width: 620px) {
+  .prompt-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .enabled-field {
+    padding-bottom: 0;
+  }
+}

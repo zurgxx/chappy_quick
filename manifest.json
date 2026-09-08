@@ -1,8 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Chappy Quick",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ChatGPT Webに定型文のクイック送信ボタンを追加します。",
+  "permissions": ["storage"],
+  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": ["https://chatgpt.com/*"],

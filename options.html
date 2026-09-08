@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chappy Quick Settings</title>
+    <link rel="stylesheet" href="options.css">
+    <script src="options.js" defer></script>
+  </head>
+  <body>
+    <main class="settings">
+      <h1>Chappy Quick Settings</h1>
+      <p class="description">ChatGPTに表示する定型文を編集できます。</p>
+
+      <div id="prompt-list" class="prompt-list"></div>
+
+      <button id="add-prompt" class="secondary-button" type="button">＋追加</button>
+
+      <div class="actions">
+        <button id="reset-prompts" class="secondary-button" type="button">初期値に戻す</button>
+        <button id="save-prompts" class="primary-button" type="button">保存</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+  </body>
+</html>
