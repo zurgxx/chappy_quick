@@ -46,6 +46,12 @@
     return prompt?.closest("form") || prompt?.parentElement || null;
   }
 
+  function getPromptRow(root, prompt) {
+    let row = prompt;
+    while (row.parentElement && row.parentElement !== root) row = row.parentElement;
+    return row.parentElement === root ? row : null;
+  }
+
   function getPromptText(prompt) {
     if (!prompt) return "";
     if (prompt.querySelector?.(".placeholder, p.placeholder")) return "";
@@ -247,7 +253,15 @@
     }
 
     if (!buttons) buttons = createButtons();
-    if (buttons.parentElement !== root) root.insertBefore(buttons, root.firstChild);
+
+    const promptRow = getPromptRow(root, prompt);
+    if (promptRow) {
+      if (buttons.previousElementSibling !== promptRow) {
+        root.insertBefore(buttons, promptRow.nextSibling);
+      }
+    } else if (buttons.parentElement !== root) {
+      root.appendChild(buttons);
+    }
   }
 
   function scheduleMount() {

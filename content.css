@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin: 0 0 8px;
+  margin: 8px 0 0;
   padding: 0 2px;
   font-family: inherit;
 }
