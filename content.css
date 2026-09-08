@@ -1,0 +1,31 @@
+#chappy-quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0 2px;
+  font-family: inherit;
+}
+
+#chappy-quick-buttons .chappy-quick-button {
+  appearance: none;
+  border: 1px solid var(--border-light, rgba(128, 128, 128, 0.35));
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: transparent;
+  color: var(--text-secondary, inherit);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+#chappy-quick-buttons .chappy-quick-button:hover {
+  background: var(--surface-secondary, rgba(128, 128, 128, 0.12));
+}
+
+#chappy-quick-buttons .chappy-quick-button:focus-visible {
+  outline: 2px solid var(--accent, #5b9cff);
+  outline-offset: 1px;
+}
