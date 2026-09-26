@@ -62,17 +62,33 @@
     );
   }
 
+  function isWritingBlockEditor(element) {
+    return Boolean(element?.closest(".writing-block-editor"));
+  }
+
   function findPromptElement() {
     const selectors = [
       "#prompt-textarea",
       'textarea[placeholder*="Message" i]',
-      'main textarea',
-      'main [contenteditable="true"]',
+      "main textarea",
       '[contenteditable="true"][data-virtualkeyboard="true"]',
+      'main [contenteditable="true"]',
       '[contenteditable="true"]'
     ];
 
     for (const selector of selectors) {
+      const excludeWritingBlock =
+        selector === 'main [contenteditable="true"]' ||
+        selector === '[contenteditable="true"]';
+
+      if (selector.includes("contenteditable")) {
+        for (const element of document.querySelectorAll(selector)) {
+          if (excludeWritingBlock && isWritingBlockEditor(element)) continue;
+          if (isVisible(element)) return element;
+        }
+        continue;
+      }
+
       const element = document.querySelector(selector);
       if (isVisible(element)) return element;
     }
