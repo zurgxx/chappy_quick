@@ -233,7 +233,10 @@
       .join(" ")
       .toLowerCase();
 
+    const ariaLabel = button.getAttribute("aria-label");
+
     return (
+      ariaLabel === "送信" ||
       label.includes("composer-submit-button") ||
       label.includes("send-button") ||
       label.includes("send prompt") ||
