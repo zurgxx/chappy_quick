@@ -66,6 +66,14 @@
     return Boolean(element?.closest(".writing-block-editor"));
   }
 
+  function isProvisionalPrompt(element) {
+    // ChatGPTの初期表示用入力欄。本来のComposerに置き換わるまでボタンを付けない。
+    return (
+      element?.id === "pending-home-input" ||
+      element?.id === "pending-conversation-input"
+    );
+  }
+
   function findPromptElement() {
     const selectors = [
       "#prompt-textarea",
@@ -84,13 +92,14 @@
       if (selector.includes("contenteditable")) {
         for (const element of document.querySelectorAll(selector)) {
           if (excludeWritingBlock && isWritingBlockEditor(element)) continue;
+          if (isProvisionalPrompt(element)) continue;
           if (isVisible(element)) return element;
         }
         continue;
       }
 
       const element = document.querySelector(selector);
-      if (isVisible(element)) return element;
+      if (!isProvisionalPrompt(element) && isVisible(element)) return element;
     }
 
     return null;
